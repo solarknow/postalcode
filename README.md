@@ -16,7 +16,7 @@ code=postalcode('EC2A 4BX')
 isCode=code.isPlausible()
 postal_area=code.getPostalArea()
 ```
-#Setup
+#Setup and use
 -----------
 There are two ways of making use of the library:
 1. Copy postcode.py into your PYTHONPATH and import postalcode like in the above code snippet. THis allows you to make use of it in other modules.
