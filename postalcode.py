@@ -13,8 +13,10 @@ class postalcode(object):
     def __str__(self):
         return "Postal Code: "+self.code
     def isPlausible(self):
-        "returns True if test postalcode is a plausible code, not if it is an actual code"
+        "Returns True if test postalcode is a plausible code, not if it is an actual code"
+        ##Initial Processing
         first=self.code.split()[0]
+
         try:
             last=self.code.split()[1]
         except IndexError:
@@ -22,76 +24,67 @@ class postalcode(object):
                 last=self.code[-3:]
             else:
                 last=''
+
         lenfirst=len(first)
+        ##Tests if code is alphanumeric 
         if not (first.isalnum() and last.isalnum()):
-            #return 1
             return False
-        if len(last)!=3:
-            #return 2
+        
+        ##Tests associated with the inward code
+        if len(last)!=3: #Length
             return False
-        if not (last[0].isdigit() and last[1].isalpha() and last[2].isalpha()):
-                    #return 3
+        if not (last[0].isdigit() and last[1].isalpha() and last[2].isalpha()):  #Format
                     return False
-        elif re.search('[^CIKMOV]', last[1]) is None or re.search('[^CIKMOV]', last[2]) is None:
-                 #return 4
+        elif re.search('[^CIKMOV]', last[1]) is None or re.search('[^CIKMOV]', last[2]) is None: #Letter choice
                  return False
+        ##Tests associated with the outward code
         else:
-            if lenfirst<2 or lenfirst>4:
-                #return 5
+            if lenfirst<2 or lenfirst>4: #Length
                 return False
-            if first[0].isdigit():
-                #return 6
+            if first[0].isdigit(): #Format: First character is always alpha
                 return False
+            #Tests for length 2 outward code
             if lenfirst==2:
-                if re.search('[BEGLMNSW]',first[0]) is None:
-                    #return 7
+                if re.search('[BEGLMNSW]',first[0]) is None: #Letter Choice
                     return False
-                elif first[1].isalpha():
-                    #return 8
+                elif first[1].isalpha(): #Format: Second character is numeric
                     return False
-                else:
+                else: #Code is plausible
                     return True
-            if lenfirst==3:
-                if re.search('[^QVX]', first[0]) is None:
-                    #return 9
+            #Tests for length 3 outward code
+            if lenfirst==3: #Length
+                if re.search('[^QVX]', first[0]) is None: #Letter Choice
                     return False
-                elif first[1].isalpha():
-                    if re.search('[^IJZ]', first[1]) is None:
-                        #return 10
+                elif first[1].isalpha(): #Format: Second character can be either alphabetical or numeric
+                    if re.search('[^IJZ]', first[1]) is None: #Letter Choice
                         return False
-                    elif first[2].isalpha():
+                    elif first[2].isalpha(): #Format: If second character is alpha, third MUST be numeric
                         return False
                     else:
-                        return True
-                elif first[2].isalpha():
-                    if re.search('[ABCDEFGHJKSTUW]', first[2]) is None:
-                        #return 11
+                        return True #Code is plausible
+                elif first[2].isalpha(): #Format: If second character is numerical, third character can be either alpha or numeric
+                    if re.search('[ABCDEFGHJKSTUW]', first[2]) is None: #Letter Choice
                         return False
-                    return True
-                else:
-                    return True
-            else:
-                if re.search('[^QVX]', first[0]) is None:
-                    #return 12
+                    return True #Code is plausible
+                else: #Format: Third character is numerical
+                    return True #Code is plausible
+            #Tests for length 4 outward code
+            else: #Length
+                if re.search('[^QVX]', first[0]) is None: #Letter Choice
                     return False
-                elif first[1].isdigit():
-                    #return 13
+                elif first[1].isdigit(): #Format: Second character MUST be alpha
                     return False
-                elif re.search('[^IJZ]', first[1]) is None:
-                    #return 14
+                elif re.search('[^IJZ]', first[1]) is None: #Letter Choice
                     return False
-                if first[2].isalpha():
-                    #return 15
+                if first[2].isalpha(): #Format: third character MUST be numeric
                     return False
-                elif first[3].isalpha():
-                    if re.search('[ABEHMNPRVWXY]',first[3]) is None:
-                        #return 16
+                elif first[3].isalpha(): #Format: fourth character can be either alpha or numeric
+                    if re.search('[ABEHMNPRVWXY]',first[3]) is None: #Letter Choice
                         return False
-                    else:
-                        return True
+                    else: #Format: fourth character is numeric
+                        return True #Code is plausible
                 else:
-                    #return 9000
-                    return True
+                    return True #Code is plausible
     def getCode(self):
         "Returns postal code"
         return self.code
