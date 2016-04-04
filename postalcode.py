@@ -4,8 +4,7 @@ Created on Thu Mar 31 08:42:25 2016
 This module presents validation and formatting of post codes for UK
 @author: Mihir Sarwade
 """
-import re, itertools
-
+import re, itertools, sys
 class postalcode(object):
     
     def __init__(self,code):
@@ -104,4 +103,18 @@ class postalcode(object):
     def getSector(self):
         "Returns postal sector"
         return ' '.join([self.getDistrict(),self.getInwardCode()[0]])
-        
+    def getUnit(self):
+        "Returns postal unit"
+        return self.getInwardCode()[1:]
+if __name__ == '__main__':
+    code=postalcode(sys.argv[1])
+    print "Your code: "+code.getCode()
+    plaus=code.isPlausible()
+    print "Plausible" if plaus else "Not Valid"
+    if plaus:
+        print "Outward code: "+code.getOutwardCode()
+        print "Inward code: "+code.getInwardCode()
+        print "Postal area: "+code.getArea()
+        print "Postcode district: "+code.getDistrict()
+        print "Postcode sector: "+code.getSector()
+        print "Postcode unit: "+code.getUnit()
